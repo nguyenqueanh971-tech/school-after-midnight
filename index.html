@@ -2,142 +2,333 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trường Học Sau 12 Giờ</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background:
-        linear-gradient(rgba(5, 0, 5, .75), rgba(5, 0, 5, .95)),
-        radial-gradient(ellipse at center, #54151b, #080609 75%);
-      color: #eee;
-      font-family: Georgia, serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      overflow: hidden;
-    }
-
-    .screen {
-      width: min(900px, 92%);
-      padding: 40px 20px;
-    }
-
-    .warning {
-      color: #b98b8b;
-      letter-spacing: 5px;
-      font: 12px Arial, sans-serif;
-      margin-bottom: 35px;
-    }
-
-    h1 {
-      color: #c51f2b;
-      font-size: clamp(36px, 7vw, 76px);
-      letter-spacing: 4px;
-      text-shadow: 0 0 25px #a00018;
-      margin: 0;
-    }
-
-    h2 {
-      font: 15px Arial, sans-serif;
-      letter-spacing: 7px;
-      color: #aaa;
-      margin-top: 15px;
-    }
-
-    .story {
-      max-width: 570px;
-      margin: 45px auto 35px;
-      color: #c7bdbd;
-      line-height: 1.9;
-      font-size: 16px;
-    }
-
-    button {
-      background: #8c101d;
-      border: 1px solid #d54b55;
-      color: white;
-      padding: 17px 45px;
-      font-size: 16px;
-      letter-spacing: 3px;
-      cursor: pointer;
-      transition: .3s;
-    }
-
-    button:hover {
-      background: #c51f2b;
-      box-shadow: 0 0 30px #c51f2b;
-    }
-
-    #next {
-      display: none;
-    }
-
-    .footer {
-      color: #665b5b;
-      font: 11px Arial, sans-serif;
-      margin-top: 65px;
-      letter-spacing: 3px;
-    }
-
-    #intro {
-      color: #ddd;
-      line-height: 2;
-      font-size: 18px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trường Học Sau 12 Giờ</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#080609;color:#eee;
+ font-family:Georgia,serif;min-height:100vh;
+}
+button{font:inherit;cursor:pointer}
+#game{min-height:100vh;display:flex;flex-direction:column}
+header{
+ display:flex;justify-content:space-between;align-items:center;
+ padding:16px 5%;border-bottom:1px solid #492027;
+ background:#100b0e;gap:15px;flex-wrap:wrap
+}
+.logo{color:#c52b3b;letter-spacing:3px;font-size:14px}
+.stats{display:flex;gap:20px;flex-wrap:wrap;font:13px Arial}
+.stat span{color:#e34a58}
+main{width:min(1000px,92%);margin:30px auto;flex:1}
+.scene{
+ min-height:330px;padding:35px 25px;display:flex;
+ flex-direction:column;justify-content:center;text-align:center;
+ border:1px solid #492027;border-radius:8px;
+ background:
+ linear-gradient(0deg,rgba(5,3,5,.92),rgba(5,3,5,.45)),
+ radial-gradient(ellipse at center,#57232b,#171015 65%,#080609);
+ box-shadow:0 0 45px #260b12;
+ position:relative;overflow:hidden
+}
+.scene:after{
+ content:"";position:absolute;inset:0;pointer-events:none;
+ background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.018) 4px);
+}
+.time{color:#c77b80;font:12px Arial;letter-spacing:4px}
+h1{font-size:clamp(30px,6vw,55px);color:#d52e40;margin:18px 0;text-shadow:0 0 22px #a00022}
+h2{font-size:27px;color:#e6c6c6}
+.story{max-width:680px;margin:15px auto;color:#d0c2c5;line-height:1.9;font-size:17px}
+.warning{color:#e34a58;font-style:italic}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}
+.choice{
+ background:#1b1116;border:1px solid #63303a;color:#eee;
+ padding:18px 14px;text-align:left;line-height:1.5;
+ transition:.2s;border-radius:5px
+}
+.choice:hover{background:#421720;border-color:#d34454;transform:translateY(-2px)}
+.choice b{color:#ed6874;display:block;margin-bottom:7px}
+#message{
+ min-height:75px;padding:18px;border-left:3px solid #a92a3a;
+ background:#130e12;color:#d7c8ca;line-height:1.7
+}
+.bottom{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:18px}
+.smallbtn{
+ background:transparent;color:#bdaeb1;border:1px solid #59434a;
+ padding:10px 14px;border-radius:4px
+}
+.smallbtn:hover{background:#2b171d}
+.overlay{
+ position:fixed;inset:0;background:#050204;z-index:10;
+ display:none;align-items:center;justify-content:center;
+ text-align:center;padding:25px
+}
+.overlay.show{display:flex}
+.overlay h1{font-size:clamp(40px,10vw,100px);animation:shake .12s infinite}
+.overlay p{color:#eee;line-height:1.8}
+@keyframes shake{
+ 0%{transform:translate(0)}
+ 25%{transform:translate(5px,-3px)}
+ 50%{transform:translate(-4px,3px)}
+ 75%{transform:translate(3px,4px)}
+}
+#start{
+ position:fixed;inset:0;z-index:20;display:flex;
+ align-items:center;justify-content:center;text-align:center;
+ padding:25px;background:radial-gradient(ellipse,#40141d,#080609 70%)
+}
+.startbox{max-width:700px}
+.startbox p{line-height:1.9;color:#cbbfc2}
+.primary{
+ background:#941a2a;color:white;border:1px solid #e04a5a;
+ padding:16px 35px;letter-spacing:3px;margin-top:20px
+}
+.primary:hover{background:#c52b3b}
+.hidden{display:none!important}
+footer{text-align:center;color:#66545a;padding:20px;font:11px Arial;letter-spacing:3px}
+@media(max-width:650px){
+ .actions{grid-template-columns:1fr}
+ .scene{padding:25px 15px}
+ header{padding:14px}
+ .stats{gap:12px}
+}
+</style>
 </head>
-
 <body>
-  <main class="screen">
-    <div class="warning">⚠ A HORROR SURVIVAL EXPERIENCE ⚠</div>
+<div id="start">
+ <div class="startbox">
+  <div class="time">23:47 PM · 2012</div>
+  <h1>TRƯỜNG HỌC<br>SAU 12 GIỜ</h1>
+  <h2>THE SCHOOL AFTER MIDNIGHT</h2>
+  <p>
+   Một nữ sinh đã biến mất tại trường THPT Minh Khai.<br>
+   Đêm nay, 10 người bước vào ngôi trường để tìm sự thật.<br>
+   Nhưng có một điều họ chưa biết...<br><br>
+   <span class="warning">ĐỪNG TRẢ LỜI KHI NGHE AI ĐÓ GỌI TÊN BẠN.</span>
+  </p>
+  <button class="primary" onclick="beginGame()">BẮT ĐẦU · START GAME</button>
+  <p style="font-size:12px">10 PLAYERS · ONE TEAM · 3 SHARED LIVES</p>
+ </div>
+</div>
 
-    <section id="title">
-      <h1>TRƯỜNG HỌC<br>SAU 12 GIỜ</h1>
-      <h2>THE SCHOOL AFTER MIDNIGHT</h2>
+<div id="game">
+<header>
+ <div class="logo">◈ THE SCHOOL AFTER MIDNIGHT</div>
+ <div class="stats">
+  <div>❤️ MẠNG: <span id="lives">3</span></div>
+  <div>🧠 TINH THẦN: <span id="sanity">100</span>%</div>
+  <div>🔎 MANH MỐI: <span id="clues">0</span></div>
+ </div>
+</header>
 
-      <p class="story">
-        Năm 2012, tại trường THPT Minh Khai,
-        một nữ sinh biến mất sau giờ học buổi tối.
-        <br><br>
-        Người ta nói rằng... nếu nghe thấy tên mình
-        vang lên từ loa phát thanh lúc nửa đêm,
-        tuyệt đối đừng trả lời.
-      </p>
+<main>
+ <section class="scene">
+  <div class="time" id="clock">23:47 PM</div>
+  <h1 id="sceneTitle">CỔNG TRƯỜNG</h1>
+  <div class="story" id="story"></div>
+ </section>
 
-      <button onclick="startGame()">BẮT ĐẦU · START</button>
-    </section>
+ <div style="margin:20px 0 10px;color:#a98b91;font:12px Arial;letter-spacing:3px">
+  CẢ NHÓM PHẢI CHỌN MỘT HÀNH ĐỘNG
+ </div>
+ <section class="actions" id="choices"></section>
+ <div id="message">Hãy thảo luận và chọn hành động cùng nhau.</div>
+ <div class="bottom">
+  <button class="smallbtn" onclick="toggleLanguage()">VI / EN</button>
+  <button class="smallbtn" onclick="restartGame()">↻ CHƠI LẠI</button>
+ </div>
+</main>
+<footer>MINH KHAI HIGH SCHOOL · EST. 1987 · UNKNOWN STUDENT: 01</footer>
+</div>
 
-    <section id="next">
-      <p class="warning">23:47 PM · MINH KHAI HIGH SCHOOL</p>
-      <h1 style="font-size:42px">CỔNG TRƯỜNG</h1>
-      <p id="intro">
-        Cánh cổng trường từ từ mở ra.<br>
-        Bên trong tối om.<br><br>
-        Điện thoại của bạn bất ngờ rung lên...
-        <br><br>
-        <i>“Đừng vào đây. Nó đang đợi các bạn.”</i>
-      </p>
-      <button onclick="alert('Chúng ta sẽ xây dựng cảnh tiếp theo ở bước sau!')">
-        TIẾP TỤC
-      </button>
-    </section>
+<div class="overlay" id="scare">
+ <div>
+  <div style="font-size:90px">👻</div>
+  <h1>ĐỪNG QUAY LẠI!</h1>
+  <p>NÓ ĐANG ĐỨNG NGAY SAU LƯNG BẠN.</p>
+  <button class="primary" onclick="closeScare()">TIẾP TỤC</button>
+ </div>
+</div>
 
-    <div class="footer">10 PLAYERS · ONE NIGHT · NO WAY OUT</div>
-  </main>
+<script>
+const scenes = {
+ gate:{
+  title:"CỔNG TRƯỜNG",
+  time:"23:47 PM",
+  story:"Cánh cổng trường THPT Minh Khai đang hé mở. Bên trong tối om. Trên bảng thông báo có một tờ giấy cũ: “Nguyễn Ngọc Mai – lớp 12A3 – mất tích ngày 13/10/2012.”",
+  choices:[
+   ["A","Đi thẳng vào phòng bảo vệ","guard","clue","Bạn tìm thấy một cuốn sổ trực cũ. Trong đó có ghi: “Đừng để chuông reo lúc 12 giờ.”"],
+   ["B","Tìm cách mở cổng phụ","hall","risk","Cánh cổng kêu ken két. Một bóng trắng vụt qua phía bên kia."],
+   ["C","Đứng ngoài gọi tên Mai","hall","scare","Một giọng nữ thì thầm từ loa trường: “Tôi ở đây...”"]
+  ]
+ },
+ guard:{
+  title:"PHÒNG BẢO VỆ",
+  time:"23:53 PM",
+  story:"Phòng bảo vệ lạnh bất thường. Một chiếc radio cũ tự bật. Chú Bảy không có ở đây. Trên bàn là chìa khóa và cuốn sổ trực.",
+  choices:[
+   ["A","Đọc cuốn sổ trực","hall","clue","Trang cuối ghi: “Cô Hạnh đã khóa cửa phòng phát thanh.”"],
+   ["B","Bật radio","classroom","risk","Radio phát ra tiếng đếm ngược. Tinh thần của cả nhóm giảm sút."],
+   ["C","Lấy chìa khóa rồi đi","hall","safe","Bạn lấy được một chùm chìa khóa. Có thể chúng sẽ hữu ích."]
+  ]
+ },
+ hall:{
+  title:"HÀNH LANG TẦNG 2",
+  time:"23:58 PM",
+  story:"Đèn hành lang nhấp nháy. Những cánh cửa lớp học đều đóng kín. Cuối hành lang có một bóng người mặc đồng phục đứng quay lưng.",
+  choices:[
+   ["A","Tiến lại gần bóng người","bathroom","scare","Bóng người biến mất. Trên sàn chỉ còn một chiếc kẹp tóc."],
+   ["B","Vào lớp 12A3","classroom","clue","Trên bàn học có một bức ảnh của Mai và một dòng chữ: “Đừng tin cô ấy.”"],
+   ["C","Chạy xuống cầu thang","bathroom","risk","Bạn nghe tiếng bước chân chạy theo. Có người vừa chạm vào vai bạn."]
+  ]
+ },
+ classroom:{
+  title:"LỚP HỌC 12A3",
+  time:"00:03 AM",
+  story:"Một chiếc bàn ở cuối lớp được khắc đầy tên Nguyễn Ngọc Mai. Bảng đen có dòng chữ mới viết: “Tôi chưa từng rời khỏi trường.”",
+  choices:[
+   ["A","Tìm trong ngăn bàn Mai","bathroom","clue","Bạn tìm thấy một lá thư: “Nếu tôi biến mất, hãy tìm phòng phát thanh.”"],
+   ["B","Xóa dòng chữ trên bảng","basement","risk","Một tiếng hét vang lên ngay bên tai. Bạn cảm thấy đầu óc choáng váng."],
+   ["C","Rời khỏi lớp ngay","bathroom","safe","Cả nhóm rời lớp. Nhưng cửa tự đóng sầm phía sau."]
+  ]
+ },
+ bathroom:{
+  title:"NHÀ VỆ SINH NỮ",
+  time:"00:11 AM",
+  story:"Vòi nước tự chảy dù không có ai. Tấm gương phủ hơi nước. Từng nét chữ hiện lên: “CÔ HẠNH BIẾT SỰ THẬT.”",
+  choices:[
+   ["A","Lau gương để đọc chữ","basement","clue","Dưới dòng chữ hiện ra một mật mã: 1210."],
+   ["B","Mở buồng vệ sinh cuối cùng","basement","scare","Cánh cửa bật mở. Có ai đó đang đứng bên trong!"],
+   ["C","Rời đi ngay","basement","safe","Bạn nghe tiếng gõ cửa ba lần khi vừa bước ra."]
+  ]
+ },
+ basement:{
+  title:"TẦNG HẦM BÍ MẬT",
+  time:"00:19 AM",
+  story:"Sau cánh cửa sắt là một căn phòng chứa hồ sơ học sinh. Có một chiếc máy ghi âm và hồ sơ của Mai. Tên người ký xác nhận là cô Hạnh.",
+  choices:[
+   ["A","Nghe băng ghi âm","final","clue","Giọng cô Hạnh vang lên: “Tôi đã nghe thấy tiếng gọi từ tầng hầm...”"],
+   ["B","Tìm hồ sơ gốc","final","clue","Hồ sơ cho biết Mai chưa từng làm thủ tục chuyển trường."],
+   ["C","Đập cửa thoát ra","final","risk","Cửa sắt không nhúc nhích. Có tiếng móng tay cào phía sau."]
+  ]
+ },
+ final:{
+  title:"PHÒNG PHÁT THANH",
+  time:"00:27 AM",
+  story:"Loa phát thanh tự bật. Một giọng nữ đọc danh sách mười người đang ở trong trường. Nhưng danh sách có đến mười một cái tên. Cái tên cuối cùng là... NGUYỄN NGỌC MAI.",
+  choices:[
+   ["A","Tắt nguồn điện","endingGood","clue","Cả nhóm tìm thấy lối ra. Nhưng bí mật vẫn chưa được giải đáp."],
+   ["B","Gọi tên Mai và hỏi sự thật","endingSecret","risk","Một giọng nói trả lời: “Cuối cùng các bạn cũng nhớ ra tôi.”"],
+   ["C","Chạy khỏi trường","endingBad","risk","Cánh cổng biến mất. Hành lang cứ kéo dài mãi."]
+  ]
+ }
+};
 
-  <script>
-    function startGame() {
-      document.getElementById("title").style.display = "none";
-      document.getElementById("next").style.display = "block";
-    }
-  </script>
+let lives=3,sanity=100,clues=0,current="gate",language="vi",locked=false;
+
+const translations={
+ en:{
+  "CỔNG TRƯỜNG":"SCHOOL GATE","PHÒNG BẢO VỆ":"GUARD ROOM",
+  "HÀNH LANG TẦNG 2":"SECOND FLOOR HALLWAY",
+  "LỚP HỌC 12A3":"CLASSROOM 12A3",
+  "NHÀ VỆ SINH NỮ":"GIRLS' RESTROOM",
+  "TẦNG HẦM BÍ MẬT":"SECRET BASEMENT",
+  "PHÒNG PHÁT THANH":"BROADCAST ROOM"
+ }
+};
+
+function beginGame(){
+ document.getElementById("start").style.display="none";
+ showScene("gate");
+}
+
+function showScene(id){
+ current=id;locked=false;
+ const s=scenes[id];
+ document.getElementById("sceneTitle").textContent=s.title;
+ document.getElementById("clock").textContent=s.time;
+ document.getElementById("story").textContent=s.story;
+ const box=document.getElementById("choices");
+ box.innerHTML="";
+ s.choices.forEach(c=>{
+  const b=document.createElement("button");
+  b.className="choice";
+  b.innerHTML="<b>"+c[0]+" · LỰA CHỌN</b>"+c[1];
+  b.onclick=()=>choose(c);
+  box.appendChild(b);
+ });
+ document.getElementById("message").textContent="Hãy thảo luận và chọn một hành động.";
+ updateStats();
+}
+
+function choose(c){
+ if(locked)return;
+ locked=true;
+ const [letter,action,next,effect,result]=c;
+ document.getElementById("message").textContent=result;
+ if(effect==="clue")clues++;
+ if(effect==="risk"){sanity-=15;}
+ if(effect==="scare"){
+  sanity-=10;
+  showScare();
+ }
+ if(effect==="safe")sanity=Math.min(100,sanity+5);
+ if(effect==="risk"&&Math.random()<0.35)lives--;
+ if(effect==="scare"&&Math.random()<0.5)lives--;
+ sanity=Math.max(0,sanity);
+ updateStats();
+ document.querySelectorAll(".choice").forEach(b=>b.disabled=true);
+ setTimeout(()=>{
+  if(lives<=0||sanity<=0){showEnding("endingBad");return;}
+  if(next.startsWith("ending")){showEnding(next);return;}
+  showScene(next);
+ },effect==="scare"?2600:1800);
+}
+
+function showScare(){
+ const el=document.getElementById("scare");
+ el.classList.add("show");
+}
+
+function closeScare(){
+ document.getElementById("scare").classList.remove("show");
+}
+
+function updateStats(){
+ document.getElementById("lives").textContent="❤️".repeat(lives)+" ("+lives+"/3)";
+ document.getElementById("sanity").textContent=sanity;
+ document.getElementById("clues").textContent=clues;
+}
+
+function showEnding(id){
+ locked=true;
+ const endings={
+  endingGood:["BẠN ĐÃ THOÁT RA","Cánh cổng mở ra lúc 00:31. Cả nhóm sống sót. Nhưng sáng hôm sau, trên điện thoại xuất hiện một tin nhắn: “Đừng quên tôi.”"],
+  endingBad:["BẠN ĐÃ BỊ GIỮ LẠI","Không ai tìm thấy mười người sau đêm đó. Sáng hôm sau, lớp 12A3 có thêm mười chiếc bàn mới."],
+  endingSecret:["BÍ MẬT ĐƯỢC ĐÁNH THỨC","Mai xuất hiện trong gương. Cô ấy mỉm cười: “Một người trong các bạn đã từng ở đây. Hãy nhớ lại.”"]
+ };
+ const e=endings[id];
+ document.getElementById("sceneTitle").textContent=e[0];
+ document.getElementById("clock").textContent="00:31 AM · THE END";
+ document.getElementById("story").textContent=e[1]+" | Manh mối tìm được: "+clues;
+ document.getElementById("choices").innerHTML=
+ '<button class="choice" onclick="restartGame()"><b>↻ CHƠI LẠI</b>Bắt đầu một đêm mới</button>';
+ document.getElementById("message").textContent="KẾT THÚC — CẢ NHÓM ĐÃ ĐI ĐẾN HỒI KẾT.";
+}
+
+function restartGame(){
+ lives=3;sanity=100;clues=0;
+ closeScare();
+ document.getElementById("start").style.display="flex";
+ updateStats();
+}
+
+function toggleLanguage(){
+ language=language==="vi"?"en":"vi";
+ document.getElementById("message").textContent=
+ language==="en"?"Vietnamese / English mode selected. More translations will be added.":"Đã chọn chế độ tiếng Việt.";
+}
+</script>
 </body>
 </html>
