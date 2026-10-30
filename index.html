@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trường Học Sau 12 Giờ</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(rgba(5, 0, 5, .75), rgba(5, 0, 5, .95)),
+        radial-gradient(ellipse at center, #54151b, #080609 75%);
+      color: #eee;
+      font-family: Georgia, serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .screen {
+      width: min(900px, 92%);
+      padding: 40px 20px;
+    }
+
+    .warning {
+      color: #b98b8b;
+      letter-spacing: 5px;
+      font: 12px Arial, sans-serif;
+      margin-bottom: 35px;
+    }
+
+    h1 {
+      color: #c51f2b;
+      font-size: clamp(36px, 7vw, 76px);
+      letter-spacing: 4px;
+      text-shadow: 0 0 25px #a00018;
+      margin: 0;
+    }
+
+    h2 {
+      font: 15px Arial, sans-serif;
+      letter-spacing: 7px;
+      color: #aaa;
+      margin-top: 15px;
+    }
+
+    .story {
+      max-width: 570px;
+      margin: 45px auto 35px;
+      color: #c7bdbd;
+      line-height: 1.9;
+      font-size: 16px;
+    }
+
+    button {
+      background: #8c101d;
+      border: 1px solid #d54b55;
+      color: white;
+      padding: 17px 45px;
+      font-size: 16px;
+      letter-spacing: 3px;
+      cursor: pointer;
+      transition: .3s;
+    }
+
+    button:hover {
+      background: #c51f2b;
+      box-shadow: 0 0 30px #c51f2b;
+    }
+
+    #next {
+      display: none;
+    }
+
+    .footer {
+      color: #665b5b;
+      font: 11px Arial, sans-serif;
+      margin-top: 65px;
+      letter-spacing: 3px;
+    }
+
+    #intro {
+      color: #ddd;
+      line-height: 2;
+      font-size: 18px;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="screen">
+    <div class="warning">⚠ A HORROR SURVIVAL EXPERIENCE ⚠</div>
+
+    <section id="title">
+      <h1>TRƯỜNG HỌC<br>SAU 12 GIỜ</h1>
+      <h2>THE SCHOOL AFTER MIDNIGHT</h2>
+
+      <p class="story">
+        Năm 2012, tại trường THPT Minh Khai,
+        một nữ sinh biến mất sau giờ học buổi tối.
+        <br><br>
+        Người ta nói rằng... nếu nghe thấy tên mình
+        vang lên từ loa phát thanh lúc nửa đêm,
+        tuyệt đối đừng trả lời.
+      </p>
+
+      <button onclick="startGame()">BẮT ĐẦU · START</button>
+    </section>
+
+    <section id="next">
+      <p class="warning">23:47 PM · MINH KHAI HIGH SCHOOL</p>
+      <h1 style="font-size:42px">CỔNG TRƯỜNG</h1>
+      <p id="intro">
+        Cánh cổng trường từ từ mở ra.<br>
+        Bên trong tối om.<br><br>
+        Điện thoại của bạn bất ngờ rung lên...
+        <br><br>
+        <i>“Đừng vào đây. Nó đang đợi các bạn.”</i>
+      </p>
+      <button onclick="alert('Chúng ta sẽ xây dựng cảnh tiếp theo ở bước sau!')">
+        TIẾP TỤC
+      </button>
+    </section>
+
+    <div class="footer">10 PLAYERS · ONE NIGHT · NO WAY OUT</div>
+  </main>
+
+  <script>
+    function startGame() {
+      document.getElementById("title").style.display = "none";
+      document.getElementById("next").style.display = "block";
+    }
+  </script>
+</body>
+</html>
